@@ -26,9 +26,9 @@ class Matrix(object):
         self.h = len(grid)
         self.w = len(grid[0])
 
-    #
-    # Primary matrix math methods
-    #############################
+    ###############################
+    # Primary matrix math methods #
+    ###############################
  
     def determinant(self):
         
@@ -37,9 +37,9 @@ class Matrix(object):
         Calculates the determinant of a 1x1 or 2x2 matrix.
         """
         if not self.is_square():
-            raise(ValueError, "Cannot calculate determinant of non-square matrix.")
+            raise ValueError("Cannot calculate determinant of non-square matrix.")
         elif self.h > 2:
-            raise(NotImplementedError, "Calculating determinant not implemented for matrices largerer than 2x2.")
+            raise NotImplementedError("Calculating determinant not implemented for matrices largerer than 2x2.")
         # TODO - your code here
         elif self.h == 1:
             det = self.g[0][0]
@@ -53,7 +53,7 @@ class Matrix(object):
         Calculates the trace of a matrix (sum of diagonal entries).
         """
         if not self.is_square():
-            raise(ValueError, "Cannot calculate the trace of a non-square matrix.")
+            raise ValueError("Cannot calculate the trace of a non-square matrix.")
          # TODO - your code here
         else:
             return sum([self.g[i][i] for i in range(self.h)])
@@ -63,9 +63,9 @@ class Matrix(object):
         Calculates the inverse of a 1x1 or 2x2 Matrix.
         """
         if not self.is_square():
-            raise(ValueError, "Non-square Matrix does not have an inverse.")
+            raise ValueError( "Non-square Matrix does not have an inverse.")
         elif self.h > 2:
-            raise(NotImplementedError, "inversion not implemented for matrices larger than 2x2.")
+            raise NotImplementedError("inversion not implemented for matrices larger than 2x2.")
         # TODO - your code here
         else:   
             inverse = [[1 / self.determinant() for _ in range(self.w)] for __ in range(self.h)]
@@ -86,9 +86,10 @@ class Matrix(object):
     def is_square(self):
         return self.h == self.w
 
-    #
-    # Begin Operator Overloading
-    ############################
+    ##############################
+    # Begin Operator Overloading #
+    ##############################
+    
     def __getitem__(self,idx):
         """
         Defines the behavior of using square brackets [] on instances
@@ -120,12 +121,13 @@ class Matrix(object):
         Defines the behavior of the + operator
         """
         if self.h != other.h or self.w != other.w:
-            raise(ValueError, "Matrices can only be added if the dimensions are the same") 
+            raise ValueError("Matrices can only be added if the dimensions are the same") 
         #   
         # TODO - your code here
         #
         else:        
             return Matrix([[self.g[j][i] + other.g[j][i] for j in range(0, self.h)] for i in range(0, self.w)])
+
     def __neg__(self):
         """
         Defines the behavior of - operator (NOT subtraction)
@@ -142,6 +144,7 @@ class Matrix(object):
         # TODO - your code here
         #
         return Matrix([[self.g[j][i] * -1 for j in range(self.h)] for i in range(self.w)])
+
     def __sub__(self, other):
         """
         Defines the behavior of - operator (as subtraction)
@@ -150,9 +153,10 @@ class Matrix(object):
         # TODO - your code here
         #
         if self.h != other.h or self.w != other.w:
-            raise(ValueError, "Matrices can only be subtracted if the dimensions are the same") 
+            raise ValueError("Matrices can only be subtracted if the dimensions are the same") 
         else:
             return Matrix([[self.g[j][i] - other.g[j][i] for j in range(self.h)] for i in range(self.w)])
+
     def __mul__(self, other):
         """
         Defines the behavior of * operator (matrix multiplication)
@@ -161,7 +165,7 @@ class Matrix(object):
         # TODO - your code here
         #
         if self.w != other.h:
-            raise(ValueError, "Matrices can only be multiplied if the both matrix are same height") 
+            raise ValueError("Matrices can only be multiplied if the both matrix are same height") 
         else:
             mul = [[1.0 for _ in range(other.w)] for __ in range(self.h)]
             for i in range(self.h):

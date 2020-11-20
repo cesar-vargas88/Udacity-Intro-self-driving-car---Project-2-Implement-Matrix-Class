@@ -1,52 +1,36 @@
-import math
-from math import sqrt
 import numbers
-
-def zeroes(height, width):
-        """
-        Creates a matrix of zeroes.
-        """
-        g = [[0.0 for _ in range(width)] for __ in range(height)]
-        return Matrix(g)
-
-def identity(n):
-        """
-        Creates a n x n identity matrix.
-        """
-        I = zeroes(n, n)
-        for i in range(n):
-            I.g[i][i] = 1.0
-        return I
+import numpy as np
 
 class Matrix(object):
 
     # Constructor
     def __init__(self, grid):
-        self.g = grid
+
+        if not isinstance(grid, (list, np.ndarray)):
+            raise ValueError("Non-valid Matrix, make sure to enter a valid list.")
+
+        self.g = np.array(grid)
         self.h = len(grid)
-        self.w = len(grid[0])
+        self.w = 1
+
+        if isinstance(grid[0], list):
+            self.w = len(grid[0])
+
+        #if any(not isinstance(self.g[i][j], (int, float)) for j in range(0, self.w) for i in range(0, self.h)):
+        #    raise ValueError("Non-valid Matrix, make sure to enter just int or float values.")
 
     ###############################
     # Primary matrix math methods #
     ###############################
  
     def determinant(self):
-        
-        det = 0
         """
-        Calculates the determinant of a 1x1 or 2x2 matrix.
+        Calculates the determinant of a matrix.
         """
         if not self.is_square():
             raise ValueError("Cannot calculate determinant of non-square matrix.")
-        elif self.h > 2:
-            raise NotImplementedError("Calculating determinant not implemented for matrices largerer than 2x2.")
-        # TODO - your code here
-        elif self.h == 1:
-            det = self.g[0][0]
-        else:
-            det = self.g[0][0] * self.g[1][1] - self.g[0][1] * self.g[1][0]
-
-        return det
+  
+        return np.linalg.det(self.g)
     
     def trace(self):
         """
@@ -54,35 +38,26 @@ class Matrix(object):
         """
         if not self.is_square():
             raise ValueError("Cannot calculate the trace of a non-square matrix.")
-         # TODO - your code here
-        else:
-            return sum([self.g[i][i] for i in range(self.h)])
+        else:            
+            return np.trace(self.g)
 
     def inverse(self):
         """
-        Calculates the inverse of a 1x1 or 2x2 Matrix.
+        Calculates the inverse of a Matrix.
         """
         if not self.is_square():
-            raise ValueError( "Non-square Matrix does not have an inverse.")
-        elif self.h > 2:
-            raise NotImplementedError("inversion not implemented for matrices larger than 2x2.")
-        # TODO - your code here
+            raise ValueError("Non-square Matrix does not have an inverse.")
+        if self.determinant() == 0:
+            raise ValueError("Non-invertible Matrix, because the determinant is zero.")
         else:   
-            inverse = [[1 / self.determinant() for _ in range(self.w)] for __ in range(self.h)]
-            if self.h == 2:
-                inverse[0][0] *=  self.g[1][1]
-                inverse[0][1] *= -self.g[0][1]
-                inverse[1][0] *= -self.g[1][0]
-                inverse[1][1] *=  self.g[0][0]        
-            return Matrix(inverse)
+            return Matrix(np.linalg.inv(self.g))
         
     def T(self):  
         """
         Returns a transposed copy of this Matrix.
         """
-        # TODO - your code here    
-        return Matrix([[self[i][j] for i in range(self.h)] for j in range(self.w)])
-    
+        return Matrix(np.transpose(self.g))
+
     def is_square(self):
         return self.h == self.w
 
@@ -122,11 +97,8 @@ class Matrix(object):
         """
         if self.h != other.h or self.w != other.w:
             raise ValueError("Matrices can only be added if the dimensions are the same") 
-        #   
-        # TODO - your code here
-        #
         else:        
-            return Matrix([[self.g[i][j] + other.g[i][j] for j in range(0, self.w)] for i in range(0, self.h)])
+            return Matrix(self.g + other.g)
 
     def __neg__(self):
         """
@@ -140,30 +112,22 @@ class Matrix(object):
           -1.0  -2.0
           -3.0  -4.0
         """
-        #   
-        # TODO - your code here
-        #
-        return Matrix([[self.g[i][j] * -1 for j in range(self.w)] for i in range(self.h)])
+        return Matrix(self.g * -1)
 
     def __sub__(self, other):
         """
         Defines the behavior of - operator (as subtraction)
         """
-        #   
-        # TODO - your code here
-        #
         if self.h != other.h or self.w != other.w:
             raise ValueError("Matrices can only be subtracted if the dimensions are the same") 
-        else:
-            return Matrix([[self.g[i][j] - other.g[i][j] for j in range(0, self.w)] for i in range(0, self.h)])
+        else:        
+            return Matrix(self.g - other.g)
 
     def __mul__(self, other):
         """
         Defines the behavior of * operator (matrix multiplication)
         """
-        #   
-        # TODO - your code here
-        #
+
         if self.w != other.h:
             raise ValueError("Matrices can only be multiplied if the both matrix are same height") 
         else:
@@ -191,10 +155,9 @@ class Matrix(object):
         """
         if isinstance(other, numbers.Number):
             pass
-            #   
-            # TODO - your code here
-            #
-            return Matrix([[self.g[i][j] * other for j in range(self.w)] for i in range(self.h)])
+
+            return Matrix(self.g * other)
+            
 
            
             

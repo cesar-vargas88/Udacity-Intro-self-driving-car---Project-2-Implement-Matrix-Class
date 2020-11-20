@@ -126,7 +126,7 @@ class Matrix(object):
         # TODO - your code here
         #
         else:        
-            return Matrix([[self.g[i][j] + other.g[i][j] for j in range(0, self.h)] for i in range(0, self.w)])
+            return Matrix([[self.g[i][j] + other.g[i][j] for j in range(0, self.w)] for i in range(0, self.h)])
 
     def __neg__(self):
         """
@@ -143,7 +143,7 @@ class Matrix(object):
         #   
         # TODO - your code here
         #
-        return Matrix([[self.g[i][j] * -1 for j in range(self.h)] for i in range(self.w)])
+        return Matrix([[self.g[i][j] * -1 for j in range(self.w)] for i in range(self.h)])
 
     def __sub__(self, other):
         """
@@ -155,7 +155,7 @@ class Matrix(object):
         if self.h != other.h or self.w != other.w:
             raise ValueError("Matrices can only be subtracted if the dimensions are the same") 
         else:
-            return Matrix([[self.g[i][j] - other.g[i][j] for j in range(self.h)] for i in range(self.w)])
+            return Matrix([[self.g[i][j] - other.g[i][j] for j in range(0, self.w)] for i in range(0, self.h)])
 
     def __mul__(self, other):
         """
@@ -194,7 +194,7 @@ class Matrix(object):
             #   
             # TODO - your code here
             #
-            return Matrix([[self.g[j][i] * other for j in range(self.h)] for i in range(self.w)])
+            return Matrix([[self.g[i][j] * other for j in range(self.w)] for i in range(self.h)])
 
            
             
